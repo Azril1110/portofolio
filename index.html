@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azriel | Web Portfolio</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#F9F9F9',
+                        fg: '#111111',
+                        accent: '#2563EB',
+                        muted: '#6B7280'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html, * {
+            cursor: none !important;
+        }
+        
+        body, html {
+            background-color: #F9F9F9;
+            color: #111111;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #111111;
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999999;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+        
+        .cursor-outline {
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgba(17, 17, 17, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999998;
+            transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+            transition-timing-function: ease-out;
+        }
+
+        /* Marquee Animation */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        .reveal-inner {
+            transform: translateY(100%);
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .is-revealed .reveal-inner {
+            transform: translateY(0);
+        }
+
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(17, 17, 17, 0.65);
+            transition: color 0.3s, -webkit-text-stroke 0.3s;
+        }
+        .text-outline:hover {
+            color: #111111;
+            -webkit-text-stroke: 1.5px #111111;
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F9F9F9; }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+    </style>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    
+    <div class="noise"></div>
+    <div id="root"></div>
+
+    <script>
+    window.portfolioData = {
+        name: "Muhammad Azriel Kamal",
+        role: "Informatics Engineering Student",
+        bio: "I am an Informatics Engineering student at Jakarta State Polytechnic with a strong passion and expertise in digital product development, UI/UX design, and front-end engineering. I thrive in collaborative team environments and am always open to feedback to build functional and visually appealing solutions. My experience across various projects has honed my skills in digital solution planning, designing responsive interfaces, applying design thinking principles, and developing robust web and mobile applications.",
+        photo: "images/orangganteng3.png", 
+        skills: [
+            { name: "Java", icon: "fa-brands fa-java" },
+            { name: "Python", icon: "fa-brands fa-python" },
+            { name: "JavaScript", icon: "fa-brands fa-js" },
+            { name: "HTML5 & CSS3", icon: "fa-brands fa-html5" },
+            { name: "React", icon: "fa-brands fa-react" },
+            { name: "MySQL", icon: "fa-solid fa-database" },
+            { name: "Supabase", icon: "fa-solid fa-cloud" },
+            { name: "Android Studio", icon: "fa-brands fa-android" },
+            { name: "Figma", icon: "fa-brands fa-figma" },
+            { name: "GitHub", icon: "fa-brands fa-github" }
+        ],
+        projects: [
+            { 
+                title: 'PMAP PLN ICON PLUS', 
+                type: 'Full Stack', 
+                year: '2026',
+                desc: 'A centralized internal platform for real-time monitoring and synchronization of network link activation progress.', 
+                longDesc: `The Project Activation Monitoring Platform (PMAP) for PLN Icon Plus is a centralized internal system designed to manage, monitor, and synchronize the progress of network link activation projects directly from the field in real-time.<br><br>Featuring a modern, clean, and highly structured interface, this platform streamlines operational reporting from technical teams to management through an integrated workspace, automated status updates, and transparent data visualization. The implementation of this system minimizes cross-divisional communication barriers, accelerates activation timelines, and ensures that the entire telecommunications infrastructure workflow within PLN Icon Plus SBU Jakarta is documented accurately, reliably, and efficiently.`,
+                img: 'images/pmap_pln.png' 
+            },
+            { 
+                title: 'Churnify', 
+                type: 'Front End', 
+                year: '2026',
+                desc: 'A Machine Learning-powered analytics platform for predicting Spotify user churn risk.', 
+                longDesc: `Churnify is a machine learning-based analytics platform designed to detect user churn risk (subscription cancellations) for music streaming services in real-time. Stemming from the challenge of high new-user acquisition costs compared to retention, this project leverages behavioral data—such as listening patterns, session duration declines, and interaction history—to provide an early warning system for business teams.<br><br>Through a clean and highly interactive interface, users can run instant predictive simulations (Live Prediction) and dissect the primary factors triggering churn (feature importance) utilizing an explainable AI approach.`,
+                img: 'images/churnify.png' 
+            },
+            { 
+                title: 'LMS RTPU', 
+                type: 'Front End', 
+                year: '2025',
+                desc: 'An integrated platform serving as an applied research showcase and Learning Management System for RTPU PNJ.', 
+                longDesc: `The Technology Engineering and Center of Excellence (RTPU) website for PNJ is an integrated platform functioning as both a showcase for applied research commercialization and a Learning Management System (LMS) to bridge campus innovation with industry needs.<br><br>Designed with a modern, responsive, and user-friendly interface, the platform allows industry partners and the academic community to centrally access information on flagship research products, Innovation Week agendas, and vocational training modules. Developed through a structured software engineering life cycle—from system requirement specifications to comprehensive validation via User Acceptance Testing (UAT)—this website ensures reliable performance, intuitive navigation, and seamless interaction flows to accelerate technology collaboration and commercialization.`,
+                img: 'images/rtpu.png' 
+            },
+            { 
+                title: 'EUPHORIA', 
+                type: 'Website', 
+                year: '2025',
+                desc: 'A modern concert ticketing and catalog website for the Euphoria music event.', 
+                longDesc: `Euphoria, A Night of Modern Beats is an online platform designed to make it effortless for prospective attendees to find comprehensive information about modern music events, performing artist profiles, concert schedules, and seamless online ticket booking. This project was built with a strong focus on intuitive navigation and visual appeal, ensuring visitors can rapidly access the details they need.<br><br>Key features include a roster of artists with detailed profiles, interactive concert schedules, and a robust ticketing system offering various pricing tiers. The website features fully responsive web design (RWD) to guarantee an optimal viewing experience across all devices, from desktops to smartphones.<br><br><strong>Project Objective:</strong> To enhance the visibility of the "Euphoria, A Night of Modern Beats" music event while providing a comprehensive, informative experience and frictionless ticket booking for prospective attendees.`,
+                img: 'images/tiket web.png' 
+            },
+            { 
+                title: 'Prodiku', 
+                type: 'Decision Support System', 
+                year: '2024',
+                desc: 'A Decision Support System utilizing the MOORA method to help high school students choose suitable IT study programs.', 
+                longDesc: `Prodiku is a web application designed to assist high school students in selecting Information and Communication Technology (ICT) study programs that best align with their interests, skills, and future career prospects. Built with an emphasis on intuitive navigation and an engaging interface, the project ensures users can quickly access objective and measurable program recommendations.<br><br>Key features include a criteria weighting form to establish the level of importance for each factor, a preference survey comprising 10 questions regarding interests and learning styles, and a recommendation results dashboard ranked using the MOORA method score. Additionally, it features an admin panel to manage criteria data, study programs, survey questions, and to monitor user recommendation results and system summaries.<br><br><strong>Project Objective:</strong> To create a reliable decision support system that helps students make informed choices regarding ICT study programs based on measurable criteria.`,
+                img: 'images/keputusan.png' 
+            },
+            { 
+                title: 'Super Sport App', 
+                type: 'Booking System', 
+                year: '2024',
+                desc: 'A comprehensive web application for online badminton court booking and schedule management.', 
+                longDesc: `The Super Sport App is an information system designed to facilitate users in booking courts, hiring personal coaches, enrolling in badminton training schools, and purchasing sports equipment, aiming to provide a comprehensive ecosystem for badminton enthusiasts.<br><br>Key features include secure registration and authentication, a dynamic homepage offering court and coach rental options, news updates, and training school directories. It also covers detailed search and booking flows, integrated payment processing featuring order review and diverse checkout methods, user profiles for tracking training progress and history, and a contact feature for direct team interaction.<br><br><strong>Project Objective:</strong> To deliver a unified platform for badminton enthusiasts to effortlessly book courts, hire coaches, enroll in training programs, and purchase equipment, thereby elevating their overall sports experience.`,
+                img: 'images/lapangan.png' 
+            },
+            { 
+                title: 'Book Store TL', 
+                type: 'Catalog', 
+                year: '2023',
+                desc: 'A digital book catalog application for exploring and reviewing literary works.', 
+                longDesc: `Book Store TL is a specialized website crafted to make it easier for readers to explore and enjoy the latest works from the renowned author, Tere Liye. The site offers a comprehensive collection of his literature, ranging from best-selling novels to captivating short story compilations.<br><br>Key features include a dynamic homepage showcasing the latest releases and best-sellers, an expansive book directory with genre-based filtering (Action, Romance, Family, and Fantasy), a dedicated series page grouping books by their respective universes complete with synopses, detailed book pages offering in-depth information and direct purchase options, and a seamless checkout process for payments.<br><br><strong>Project Objective:</strong> To streamline the search and purchase process of Tere Liye's literary works, enabling users to effortlessly discover new releases and best-sellers across various genres and series.`,
+                img: 'images/buku.png' 
+            },
+            { 
+                title: 'Managementku', 
+                type: 'Mobile App', 
+                year: '2023',
+                desc: 'A mobile application for efficient inventory and stock management.', 
+                longDesc: `Managementku is a Java-based Android application tailored to assist users in managing inventory effortlessly and efficiently. The app empowers users to add, edit, and delete product data, making it a highly practical solution for both individuals and small businesses.<br><br>Core functionalities include the ability to add new product entries with comprehensive details such as name, description, price, and stock quantity; viewing a complete roster of stored items; modifying existing product information; and securely deleting items from the database.<br><br><strong>Project Objective:</strong> To provide a practical, streamlined stock management system via a native Android application, allowing users to effortlessly control their inventory data.`,
+                img: 'images/management.png' 
+            },
+            { 
+                title: 'Euphoria Mobile', 
+                type: 'Mobile App', 
+                year: '2024',
+                desc: 'A mobile-based application for event ticket purchasing and management.', 
+                longDesc: `Euphoria Mobile is a cross-platform mobile application developed using Flutter, designed to help prospective attendees easily find comprehensive information regarding the "Euphoria, A Night of Modern Beats" music event. It provides detailed artist profiles, concert schedules, and convenient online ticket booking, all powered by a robust FastAPI backend tailored specifically for end-users.<br><br>The application comes equipped with QR code integration for instant ticket validation, comprehensive purchase history tracking, and real-time event notifications. It serves as a strong showcase of mobile development proficiency and seamless payment/event API integration.<br><br><strong>Innovation:</strong> Delivering high accessibility and a frictionless user experience in the mobile ticketing space.`,
+                img: 'images/tiket mobile.png' 
+            }
+        ]
+    };
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function useCustomCursor() {
+            const dotRef = useRef(null);
+            const outlineRef = useRef(null);
+
+            useEffect(() => {
+                const moveCursor = (e) => {
+                    if (dotRef.current) {
+                        dotRef.current.style.left = `${e.clientX}px`;
+                        dotRef.current.style.top = `${e.clientY}px`;
+                    }
+                    if (outlineRef.current) {
+                        setTimeout(() => {
+                            if (outlineRef.current) {
+                                outlineRef.current.style.left = `${e.clientX}px`;
+                                outlineRef.current.style.top = `${e.clientY}px`;
+                            }
+                        }, 50);
+                    }
+                };
+
+                const handleMouseOver = (e) => {
+                    const target = e.target.closest('a, button, input, textarea, .hover-target');
+                    if (target && dotRef.current && outlineRef.current) {
+                        dotRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                        outlineRef.current.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                        outlineRef.current.style.borderColor = '#2563EB';
+                        outlineRef.current.style.backgroundColor = 'rgba(37,99,235,0.05)';
+                    }
+                };
+
+                const handleMouseOut = () => {
+                    if (dotRef.current && outlineRef.current) {
+                        dotRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+                        outlineRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+                        outlineRef.current.style.borderColor = 'rgba(17,17,17,0.2)';
+                        outlineRef.current.style.backgroundColor = 'transparent';
+                    }
+                };
+
+                window.addEventListener('mousemove', moveCursor);
+                document.addEventListener('mouseover', handleMouseOver);
+                document.addEventListener('mouseout', handleMouseOut);
+
+                return () => {
+                    window.removeEventListener('mousemove', moveCursor);
+                    document.removeEventListener('mouseover', handleMouseOver);
+                    document.removeEventListener('mouseout', handleMouseOut);
+                };
+            }, []);
+
+            return { dotRef, outlineRef };
+        }
+
+        function ScrollReveal({ children, className = "", delay = 0 }) {
+            const ref = useRef(null);
+            const [isVisible, setIsVisible] = useState(false);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(([entry]) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            setIsVisible(true);
+                        }, delay);
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.1 });
+                
+                if (ref.current) observer.observe(ref.current);
+                return () => observer.disconnect();
+            }, [delay]);
+
+            return (
+                <div ref={ref} className={`${className} ${isVisible ? 'is-revealed' : ''}`}>
+                    {children}
+                </div>
+            );
+        }
+
+        function App() {
+            const { dotRef, outlineRef } = useCustomCursor();
+            const { name, role, bio, photo, skills, projects } = window.portfolioData;
+            
+            const [selectedProject, setSelectedProject] = useState(null);
+
+            useEffect(() => {
+                if (selectedProject) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'unset';
+                }
+                return () => document.body.style.overflow = 'unset';
+            }, [selectedProject]);
+
+            return (
+                <div className="font-sans text-fg selection:bg-accent selection:text-white pb-10 relative">
+                    <div ref={dotRef} className="cursor-dot hidden md:block"></div>
+                    <div ref={outlineRef} className="cursor-outline hidden md:block"></div>
+
+                    {/* Navbar */}
+                    <nav className="fixed top-0 left-0 w-full px-6 py-5 md:px-12 flex justify-between items-center z-40 bg-bg/80 backdrop-blur-md border-b border-gray-200">
+                        <div className="font-display font-bold text-xl tracking-tight">Azriel.</div>
+                        <a href="#contact" className="hover-target text-sm font-semibold hover:text-accent transition-colors">
+                            Contact Me
+                        </a>
+                    </nav>
+
+                    {/* HERO SECTION */}
+                    <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-20">
+                        <div className="max-w-4xl">
+                            <ScrollReveal className="reveal-text">
+                                <h1 className="reveal-inner font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-fg mb-4">
+                                    {name}
+                                </h1>
+                            </ScrollReveal>
+                            <ScrollReveal className="reveal-text" delay={100}>
+                                <h2 className="reveal-inner font-display text-2xl md:text-4xl font-medium tracking-tight text-muted">
+                                    {role} at PNJ
+                                </h2>
+                            </ScrollReveal>
+                        </div>
+                        
+                        <ScrollReveal className="reveal-text mt-12 md:mt-16" delay={200}>
+                            <div className="reveal-inner flex gap-6 text-sm font-semibold uppercase tracking-wider">
+                                <a href="https://github.com/Azril1110" target="_blank" className="hover-target hover:text-accent border-b border-black hover:border-accent transition-colors pb-1">GitHub</a>
+                                <a href="https://www.linkedin.com/in/azrielkamal/" target="_blank" className="hover-target hover:text-accent border-b border-black hover:border-accent transition-colors pb-1">LinkedIn</a>
+                            </div>
+                        </ScrollReveal>
+                    </section>
+
+                    {/* INFINITE MARQUEE */}
+                    <div className="py-10 border-y border-gray-200 overflow-hidden flex transform -rotate-1 bg-white my-10 md:my-20 hover-target">
+                        <div className="marquee-container">
+                            <div className="marquee-content font-display text-5xl md:text-7xl font-bold tracking-wide text-outline uppercase">
+                                FRONTEND ENGINEERING • UI/UX DESIGN • FULL STACK • CREATIVE CODING • FRONTEND ENGINEERING • UI/UX DESIGN • FULL STACK • CREATIVE CODING • 
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ABOUT ME */}
+                    <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-gray-200">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
+                            {/* Photo */}
+                            <div className="md:col-span-4 lg:col-span-4 order-2 md:order-1">
+                                <ScrollReveal>
+                                    <div className="overflow-hidden rounded-2xl bg-gray-100 shadow-lg border border-gray-200 hover-target">
+                                        <img 
+                                            src={photo} 
+                                            alt={name} 
+                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                                        />
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+                            
+                            {/* Text */}
+                            <div className="md:col-span-8 lg:col-span-8 order-1 md:order-2">
+                                <ScrollReveal className="reveal-text mb-6">
+                                    <h2 className="reveal-inner font-display text-3xl md:text-4xl font-bold tracking-tight">
+                                        About Me
+                                    </h2>
+                                </ScrollReveal>
+                                <ScrollReveal className="reveal-text" delay={100}>
+                                    <p className="reveal-inner text-base md:text-lg text-muted leading-relaxed mb-10 text-justify">
+                                        {bio}
+                                    </p>
+                                </ScrollReveal>
+                                
+                                <ScrollReveal className="reveal-text" delay={200}>
+                                    <div className="reveal-inner">
+                                        <h3 className="font-bold text-sm uppercase tracking-wider text-fg mb-5">Skills & Tools</h3>
+                                        <div className="flex flex-wrap gap-3">
+                                            {skills.map((skill, index) => (
+                                                <span key={index} className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold flex items-center gap-2 hover:border-accent hover:text-accent transition-colors hover-target shadow-sm">
+                                                    <i className={`${skill.icon} text-lg`}></i> {skill.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SELECTED WORKS */}
+                    <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto bg-white border-y border-gray-200 mt-20">
+                        <div className="mb-16 text-center">
+                            <ScrollReveal className="reveal-text">
+                                <h2 className="reveal-inner font-display text-3xl md:text-5xl font-bold tracking-tight mb-4">
+                                    Selected Works
+                                </h2>
+                            </ScrollReveal>
+                            <ScrollReveal className="reveal-text" delay={100}>
+                                <p className="reveal-inner text-muted font-medium">A curated showcase of projects I have developed.</p>
+                            </ScrollReveal>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {projects.map((proj, idx) => (
+                                <ScrollReveal key={idx} className="group hover-target flex flex-col h-full bg-bg border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300" delay={idx * 100}>
+                                    
+                                    <div 
+                                        className="w-full h-full flex flex-col"
+                                        onClick={() => setSelectedProject(proj)}
+                                    >
+                                        <div className="relative w-full aspect-video bg-gray-200 overflow-hidden">
+                                            <img src={proj.img} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                            <div className="absolute top-4 left-4">
+                                                <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-xs font-bold uppercase tracking-wider text-fg rounded-md shadow-sm">
+                                                    {proj.type}
+                                                </span>
+                                            </div>
+                                            <div className="absolute top-4 right-4">
+                                                <span className="px-3 py-1 bg-black/80 backdrop-blur-sm text-xs font-bold tracking-wider text-white rounded-md shadow-sm">
+                                                    {proj.year}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="p-6 flex flex-col flex-grow">
+                                            <h3 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">
+                                                {proj.title}
+                                            </h3>
+                                            <p className="text-muted text-sm leading-relaxed flex-grow">
+                                                {proj.desc}
+                                            </p>
+                                            <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-sm font-semibold text-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                                                View Details <i className="fa-solid fa-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </ScrollReveal>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* CONTACT */}
+                    <section id="contact" className="py-24 px-6 md:px-12 max-w-4xl mx-auto mt-10 text-center">
+                        <ScrollReveal className="reveal-text mb-6">
+                            <h2 className="reveal-inner font-display text-4xl md:text-5xl font-bold tracking-tight">
+                                Let's Collaborate.
+                            </h2>
+                        </ScrollReveal>
+                        <ScrollReveal className="reveal-text" delay={100}>
+                            <p className="reveal-inner text-lg text-muted leading-relaxed mb-12">
+                                Have an exciting project idea, a collaboration opportunity, or just want to say hi? Feel free to reach out.
+                            </p>
+                        </ScrollReveal>
+                        
+                        <ScrollReveal className="reveal-text" delay={200}>
+                            <div className="reveal-inner flex flex-col items-center gap-8 bg-white p-10 border border-gray-200 rounded-3xl shadow-sm">
+                                
+                                <div className="flex flex-col md:flex-row gap-10 md:gap-24 w-full justify-center">
+                                    <div>
+                                        <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-2">Email</h4>
+                                        <a href="mailto:azrilkamal27@gmail.com" className="text-lg md:text-xl font-semibold hover:text-accent transition-colors hover-target">azrilkamal27@gmail.com</a>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-2">Location</h4>
+                                        <p className="text-lg md:text-xl font-semibold text-fg">Jakarta, Indonesia</p>
+                                    </div>
+                                </div>
+
+                                <div className="pt-8 border-t border-gray-100 w-full flex flex-col items-center">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-5">Social Media</h4>
+                                    <div className="flex gap-4">
+                                        <a href="https://github.com/Azril1110" target="_blank" className="w-12 h-12 bg-gray-50 border border-gray-200 shadow-sm rounded-full flex items-center justify-center hover:bg-fg hover:text-white transition-all hover-target text-xl">
+                                            <i className="fa-brands fa-github"></i>
+                                        </a>
+                                        <a href="https://www.linkedin.com/in/azrielkamal/" target="_blank" className="w-12 h-12 bg-gray-50 border border-gray-200 shadow-sm rounded-full flex items-center justify-center hover:bg-[#0077b5] hover:text-white hover:border-[#0077b5] transition-all hover-target text-xl">
+                                            <i className="fa-brands fa-linkedin-in"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </ScrollReveal>
+                    </section>
+
+                    {/* MODAL PROYEK */}
+                    {selectedProject && (
+                        <div 
+                            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 md:p-6"
+                            onClick={() => setSelectedProject(null)}
+                        >
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+                            
+                            <div 
+                                className="relative bg-white w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl flex flex-col animate-[slideUpFade_0.4s_ease-out_forwards]"
+                                onClick={(e) => e.stopPropagation()} 
+                            >
+                                <button 
+                                    onClick={() => setSelectedProject(null)}
+                                    className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur text-fg hover:text-red-500 rounded-full flex items-center justify-center z-10 shadow-md transition-colors hover-target"
+                                >
+                                    <i className="fa-solid fa-xmark text-xl"></i>
+                                </button>
+
+                                <div className="w-full h-56 md:h-80 bg-gray-100 relative overflow-hidden hover-target">
+                                    <img src={selectedProject.img} alt={selectedProject.title} className="w-full h-full object-cover" />
+                                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    <h3 className="absolute bottom-6 left-6 md:left-8 text-white font-display text-3xl md:text-4xl font-bold tracking-tight shadow-sm">
+                                        {selectedProject.title}
+                                    </h3>
+                                </div>
+
+                                <div className="p-6 md:p-8 overflow-y-auto max-h-[50vh]">
+                                    <div className="flex flex-wrap items-center gap-3 hover-target">
+                                        <span className="px-3 py-1 bg-gray-100 border border-gray-200 text-fg text-xs font-bold uppercase tracking-wider rounded-md">
+                                            {selectedProject.type}
+                                        </span>
+                                        <span className="text-sm font-semibold text-muted flex items-center gap-2">
+                                            <i className="fa-regular fa-calendar-alt"></i> {selectedProject.year}
+                                        </span>
+                                    </div>
+                                    
+                                    <h4 className="font-bold text-lg mt-6 mb-4 hover-target w-max">About the Project</h4>
+                                    
+                                    <div 
+                                        className="text-muted text-base leading-relaxed text-justify hover-target"
+                                        dangerouslySetInnerHTML={{ __html: selectedProject.longDesc }}
+                                    ></div>
+                                    
+                                    <div className="mt-8 pt-6 border-t border-gray-200 flex justify-end">
+                                        <button 
+                                            onClick={() => setSelectedProject(null)}
+                                            className="px-6 py-2 bg-fg text-white font-semibold rounded-lg hover:bg-accent transition-colors hover-target"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
