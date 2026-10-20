@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181B"/>
+      <stop offset="100%" stop-color="#09090B"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Squircle -->
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <!-- Border stroke for subtle contrast in dark tabs -->
+  <rect width="62" height="62" x="1" y="1" rx="15" fill="none" stroke="#27272A" stroke-width="1.5"/>
+  <!-- Monogram A. -->
+  <text x="29" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Space Grotesk', 'Inter', 'Segoe UI', sans-serif" font-size="36" font-weight="800" fill="#FFFFFF" text-anchor="middle">A</text>
+  <!-- Accent Dot -->
+  <circle cx="47" cy="41" r="4.5" fill="#2563EB"/>
+</svg>
