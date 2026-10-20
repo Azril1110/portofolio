@@ -128,6 +128,14 @@
         ::-webkit-scrollbar-track { background: #F9F9F9; }
         ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+        /* Optimasi Cetak (Print to PDF) */
+        @media print {
+            .noise, .cursor-dot, .cursor-outline, nav { display: none !important; }
+            .reveal-inner, .reveal-text { transform: none !important; opacity: 1 !important; clip-path: none !important; transition: none !important; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; overflow: visible !important; }
+            section { page-break-inside: avoid; }
+        }
     </style>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -158,6 +166,14 @@
             { name: "GitHub", icon: "fa-brands fa-github" }
         ],
         projects: [
+            { 
+                title: 'Monitoring Transmisi Fiber Optik PLN Icon Plus', 
+                type: 'Full Stack', 
+                year: '2026',
+                desc: 'A real-time telemetry and network operations monitoring platform for ADSS 24 Core optical fiber infrastructure across distribution loop rings.', 
+                longDesc: `The Fiber Optic Transmission Monitoring System is a real-time Network Operations Center (NOC) telemetry platform engineered for PLN Icon Plus to oversee and maintain optical fiber continuity across critical distribution loop rings.<br><br>As the Full Stack Developer on this project, I developed both the telemetry monitoring interface and backend synchronization architecture. The system centralizes real-time status tracking for ADSS 24 Core optical fiber routes and Data Concentrator Unit (DCU) substation nodes, monitoring loop rings spanning over 28 kilometers. Utilizing Server-Sent Events (SSE) and Supabase Cloud Synchronization, the platform provides network engineers with immediate transmission anomaly detection, live span distance metrics, and automated continuity alerts.<br><br><strong>Key Features:</strong> Live telemetry dashboard, real-time FO cable continuity monitoring, multi-loop ring transmission supervision, automated fault detection, and role-based access control (Admin & Viewer) to optimize field response and maintain continuous network uptime.`,
+                img: 'images/monitoring_fo_pln.png' 
+            },
             { 
                 title: 'PMAP PLN ICON PLUS', 
                 type: 'Full Stack', 
